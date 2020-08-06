@@ -23,6 +23,7 @@ namespace BililiveRecorder.Core
         private int _realRoomid;
         private string _streamerName;
         private string _title;
+        private bool _isLiving;
 
         public int ShortRoomId
         {
@@ -66,8 +67,22 @@ namespace BililiveRecorder.Core
             }
         }
 
+        public bool IsLiving
+        {
+            get { return _isLiving; }
+            private set
+            {
+                if (value == _isLiving)
+                    return;
+                _isLiving = value;
+                TriggerPropertyChanged(nameof(IsLiving));
+            }
+        }
+
         public bool IsMonitoring => StreamMonitor.IsMonitoring;
         public bool IsRecording => !(StreamDownloadTask?.IsCompleted ?? true);
+
+
 
         private readonly Func<IFlvStreamProcessor> newIFlvStreamProcessor;
         private IFlvStreamProcessor _processor;
@@ -134,6 +149,7 @@ namespace BililiveRecorder.Core
             ShortRoomId = e.RoomInfo.ShortRoomId;
             StreamerName = e.RoomInfo.UserName;
             Title = e.RoomInfo.Title;
+            IsLiving = e.RoomInfo.IsStreaming;
         }
 
         public bool Start()
@@ -310,7 +326,7 @@ namespace BililiveRecorder.Core
                     };
 
                     _stream = await _response.Content.ReadAsStreamAsync();
-                    
+
                     if (!new object[] { null, true }.Contains(_response.Headers.ConnectionClose))
                         _stream.ReadTimeout = 3 * 1000;
 
@@ -493,6 +509,7 @@ namespace BililiveRecorder.Core
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
         protected void TriggerPropertyChanged(string propertyName)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
