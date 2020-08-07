@@ -1,4 +1,4 @@
-﻿using Autofac;
+using Autofac;
 using BililiveRecorder.Core;
 using BililiveRecorder.FlvProcessor;
 using CommandLine;
@@ -125,6 +125,16 @@ namespace BililiveRecorder.WPF
             }
 
             NotifyIcon.Visibility = Visibility.Visible;
+            RoomNotifyEvent.NotifyEvent += RoomNotifyEvent_NotifyEvent;
+        }
+
+        private void RoomNotifyEvent_NotifyEvent(object sender, EventArgs e)
+        {
+            var room = sender as RoomInfo;
+            if (room != null && room.IsStreaming)
+            {
+                NotifyIcon.ShowBalloonTip("B站录播姬", $"{room.UserName}开播了！！！", BalloonIcon.Info);
+            }
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
