@@ -170,7 +170,6 @@ namespace BililiveRecorder.Core
         {
             RoomInfo roomInfo = await BililiveAPI.GetRoomInfoAsync(Roomid).ConfigureAwait(false);
             RoomInfoUpdated?.Invoke(this, new RoomInfoUpdatedArgs { RoomInfo = roomInfo });
-            RoomNotifyEvent.Notify(roomInfo, new EventArgs());
             return roomInfo;
         }
 

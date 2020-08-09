@@ -24,6 +24,7 @@ namespace BililiveRecorder.Core
         private string _streamerName;
         private string _title;
         private bool _isLiving;
+        private bool _isNotify = true;
 
         public int ShortRoomId
         {
@@ -78,6 +79,26 @@ namespace BililiveRecorder.Core
                 TriggerPropertyChanged(nameof(IsLiving));
             }
         }
+
+        public bool IsNotify
+        {
+            get
+            {
+                return this._isNotify;
+            }
+            set
+            {
+                if (value == _isNotify)
+                {
+                    return;
+                }
+
+                _isNotify = value;
+                TriggerPropertyChanged(nameof(IsNotify));
+                TriggerNotifyChanged(value);
+            }
+        }
+
 
         public bool IsMonitoring => StreamMonitor.IsMonitoring;
         public bool IsRecording => !(StreamDownloadTask?.IsCompleted ?? true);
@@ -135,6 +156,14 @@ namespace BililiveRecorder.Core
 
             RoomId = roomid;
             StreamerName = "...";
+            if (_config.RoomList != null)
+            {
+                var room = _config.RoomList.FirstOrDefault(s => s.Roomid == roomid);
+                if (room != null)
+                {
+                    _isNotify = room.Notify;
+                }
+            }
 
             StreamMonitor = newIStreamMonitor(RoomId);
             StreamMonitor.RoomInfoUpdated += StreamMonitor_RoomInfoUpdated;
@@ -145,11 +174,16 @@ namespace BililiveRecorder.Core
 
         private void StreamMonitor_RoomInfoUpdated(object sender, RoomInfoUpdatedArgs e)
         {
-            RoomId = e.RoomInfo.RoomId;
-            ShortRoomId = e.RoomInfo.ShortRoomId;
-            StreamerName = e.RoomInfo.UserName;
-            Title = e.RoomInfo.Title;
-            IsLiving = e.RoomInfo.IsStreaming;
+            if (e.RoomInfo != null)
+            {
+                RoomId = e.RoomInfo.RoomId;
+                ShortRoomId = e.RoomInfo.ShortRoomId;
+                StreamerName = e.RoomInfo.UserName;
+                Title = e.RoomInfo.Title;
+                IsLiving = e.RoomInfo.IsStreaming;
+                e.RoomInfo.IsNotify = this._isNotify;
+                RoomNotifyEvent.Notify(e.RoomInfo, new EventArgs());
+            }
         }
 
         public bool Start()
@@ -512,6 +546,16 @@ namespace BililiveRecorder.Core
 
         protected void TriggerPropertyChanged(string propertyName)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+        protected void TriggerNotifyChanged(bool isNotify)
+        {
+            if (_config.RoomList == null)
+                return;
+            var roomList = _config.RoomList;
+            var room = roomList.FirstOrDefault(r => r.Roomid == RoomId);
+            room.Notify = isNotify;
+            _config.RoomList = roomList;
+        }
 
         #region IDisposable Support
         private bool disposedValue = false; // 要检测冗余调用

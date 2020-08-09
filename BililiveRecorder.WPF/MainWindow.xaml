@@ -94,6 +94,14 @@
                     <DataGridTextColumn Binding="{Binding ShortRoomId,Mode=OneWay}" Header="短号"/>
                     <DataGridTextColumn Binding="{Binding RoomId,Mode=OneWay}" Header="房间号"/>
                     <DataGridTextColumn Binding="{Binding StreamerName,Mode=OneWay}" Header="主播名字"/>
+                    <DataGridTemplateColumn Header="是否通知">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox HorizontalAlignment="Center" VerticalAlignment="Center"
+										          IsChecked="{Binding Path=IsNotify, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                     <DataGridTextColumn Binding="{Binding IsLiving,Converter={StaticResource LiveStatusConverter},Mode=OneWay}" Header="直播状态"/>
                     <DataGridTextColumn Binding="{Binding IsRecording,Converter={StaticResource RecordStatusConverter},Mode=OneWay}" Header="录制状态"/>
                     <DataGridTextColumn Binding="{Binding Title,Mode=OneWay}" Header="直播间标题"/>

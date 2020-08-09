@@ -10,5 +10,8 @@ namespace BililiveRecorder.Core.Config
 
         [JsonProperty("enabled")]
         public bool Enabled { get; set; }
+
+        [JsonProperty("notify")]
+        public bool Notify { get; set; } = true;
     }
 }

@@ -32,6 +32,7 @@ namespace BililiveRecorder.WPF
         private ILifetimeScope RootScope { get; set; }
 
         public IRecorder Recorder { get; set; }
+
         public ObservableCollection<string> Logs { get; set; } =
             new ObservableCollection<string>()
             {
@@ -131,9 +132,9 @@ namespace BililiveRecorder.WPF
         private void RoomNotifyEvent_NotifyEvent(object sender, EventArgs e)
         {
             var room = sender as RoomInfo;
-            if (room != null && room.IsStreaming)
+            if (room != null && room.IsStreaming && room.IsNotify)
             {
-                NotifyIcon.ShowBalloonTip("B站录播姬", $"{room.UserName}开播了！！！", BalloonIcon.Info);
+                NotifyIcon.ShowBalloonTip("", $"{room.UserName}开播了！！！", BalloonIcon.Info);
             }
         }
 
@@ -388,6 +389,7 @@ namespace BililiveRecorder.WPF
         private void ShowSettingsWindow()
         {
             var sw = new SettingsWindow(this, Recorder.Config);
+            sw.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             if (sw.ShowDialog() == true)
             {
                 sw.Config.CopyPropertiesTo(Recorder.Config);
