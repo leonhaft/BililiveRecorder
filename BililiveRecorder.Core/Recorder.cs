@@ -196,6 +196,7 @@ namespace BililiveRecorder.Core
                 {
                     Roomid = rr.RoomId,
                     Enabled = rr.IsMonitoring,
+                    Notify = rr.IsNotify
                 });
             });
 

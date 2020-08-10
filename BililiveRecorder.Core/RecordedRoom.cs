@@ -24,7 +24,7 @@ namespace BililiveRecorder.Core
         private string _streamerName;
         private string _title;
         private bool _isLiving;
-        private bool _isNotify = true;
+        private bool _isNotify;
 
         public int ShortRoomId
         {
@@ -180,9 +180,17 @@ namespace BililiveRecorder.Core
                 ShortRoomId = e.RoomInfo.ShortRoomId;
                 StreamerName = e.RoomInfo.UserName;
                 Title = e.RoomInfo.Title;
-                IsLiving = e.RoomInfo.IsStreaming;
-                e.RoomInfo.IsNotify = this._isNotify;
-                RoomNotifyEvent.Notify(e.RoomInfo, new EventArgs());
+                //直播状态发生变化时设置直播状态,触发开播通知
+                if (e.RoomInfo.IsStreaming != IsLiving)
+                {
+                    IsLiving = e.RoomInfo.IsStreaming;
+
+                    if (e.RoomInfo.IsStreaming && this._isNotify)
+                    {
+                        e.RoomInfo.IsNotify = this._isNotify;
+                        RoomNotifyEvent.Notify(e.RoomInfo, new EventArgs());
+                    }
+                }
             }
         }
 
@@ -554,7 +562,7 @@ namespace BililiveRecorder.Core
             var roomList = _config.RoomList;
             var room = roomList.FirstOrDefault(r => r.Roomid == RoomId);
             room.Notify = isNotify;
-            _config.RoomList = roomList;
+            ConfigParser.Save(_config.WorkDirectory, _config);
         }
 
         #region IDisposable Support

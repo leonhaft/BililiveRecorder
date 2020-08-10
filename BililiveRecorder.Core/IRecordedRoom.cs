@@ -9,6 +9,7 @@ namespace BililiveRecorder.Core
         int ShortRoomId { get; }
         int RoomId { get; }
         string StreamerName { get; }
+        bool IsNotify { get; }
 
         IStreamMonitor StreamMonitor { get; }
         IFlvStreamProcessor Processor { get; }
