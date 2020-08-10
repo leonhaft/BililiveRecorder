@@ -110,6 +110,7 @@ namespace BililiveRecorder.Core
                     {
                         Task.Run(() => StreamStarted?.Invoke(this, new StreamStartedArgs() { type = TriggerType.Danmaku }));
                     }
+                    Task.Run(() => FetchRoomInfoAsync());
                     break;
                 case MsgTypeEnum.LiveEnd:
                     break;
