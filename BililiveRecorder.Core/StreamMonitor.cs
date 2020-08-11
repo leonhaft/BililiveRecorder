@@ -113,6 +113,8 @@ namespace BililiveRecorder.Core
                     Task.Run(() => FetchRoomInfoAsync());
                     break;
                 case MsgTypeEnum.LiveEnd:
+                    Task.Run(() => FetchRoomInfoAsync());
+
                     break;
                 default:
                     break;

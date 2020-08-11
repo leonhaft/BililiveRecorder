@@ -386,6 +386,14 @@ namespace BililiveRecorder.WPF
             ShowSettingsWindow();
         }
 
+
+        protected void TabSettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            var sw = new TabSettingsWindow();
+            sw.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            sw.ShowDialog();
+        }
+
         private void ShowSettingsWindow()
         {
             var sw = new SettingsWindow(this, Recorder.Config);

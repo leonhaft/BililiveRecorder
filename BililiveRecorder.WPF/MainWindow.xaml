@@ -220,7 +220,8 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <Button x:Name="SettingsButton" Click="SettingsButton_Click" Width="50" Margin="5" Content="设置" Grid.Column="1"/>
+                    <Button x:Name="SettingsButton" Click="SettingsButton_Click" Width="50" Margin="5" Content="设置" Grid.Column="0"/>
+                    <Button x:Name="TabSettingsButton" Click="TabSettingsButton_Click" Width="50" Margin="5" Content="设置1" Grid.Column="1"/>
                 </Grid>
             </Grid>
         </Grid>

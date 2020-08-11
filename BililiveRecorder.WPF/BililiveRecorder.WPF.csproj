@@ -137,6 +137,9 @@
     </Compile>
     <Compile Include="CommandLineOption.cs" />
     <Compile Include="EnumerableExtensions.cs" />
+    <Compile Include="TabSettingsWindow.xaml.cs">
+      <DependentUpon>TabSettingsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TimedMessageBox.xaml.cs">
       <DependentUpon>TimedMessageBox.xaml</DependentUpon>
     </Compile>
@@ -167,6 +170,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="SettingsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TabSettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
