@@ -94,7 +94,7 @@
                     <DataGridTextColumn Binding="{Binding ShortRoomId,Mode=OneWay}" Header="短号"/>
                     <DataGridTextColumn Binding="{Binding RoomId,Mode=OneWay}" Header="房间号"/>
                     <DataGridTextColumn Binding="{Binding StreamerName,Mode=OneWay}" Header="主播名字"/>
-                    <DataGridTemplateColumn Header="是否通知">
+                    <DataGridTemplateColumn Header="开播提醒">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <CheckBox HorizontalAlignment="Center" VerticalAlignment="Center"
@@ -220,8 +220,8 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <Button x:Name="SettingsButton" Click="SettingsButton_Click" Width="50" Margin="5" Content="设置" Grid.Column="0"/>
-                    <Button x:Name="TabSettingsButton" Click="TabSettingsButton_Click" Width="50" Margin="5" Content="设置1" Grid.Column="1"/>
+                    <Button x:Name="TabSettingsButton" Click="TabSettingsButton_Click" Visibility="Hidden" Width="50" Margin="5" Content="设置1" Grid.Column="0"/>
+                    <Button x:Name="SettingsButton" Click="SettingsButton_Click" Width="50" Margin="5" Content="设置" Grid.Column="1"/>
                 </Grid>
             </Grid>
         </Grid>

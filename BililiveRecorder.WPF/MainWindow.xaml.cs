@@ -134,7 +134,10 @@ namespace BililiveRecorder.WPF
             var room = sender as RoomInfo;
             if (room != null && room.IsStreaming && room.IsNotify)
             {
-                NotifyIcon.ShowBalloonTip("", $"{room.UserName}开播了！！！", BalloonIcon.Info);
+                Dispatcher?.InvokeAsync(() =>
+                {
+                    NotifyIcon.ShowBalloonTip($"{room.UserName}开播了！！！", room.Title, BalloonIcon.Info);
+                }, DispatcherPriority.Loaded);
             }
         }
 

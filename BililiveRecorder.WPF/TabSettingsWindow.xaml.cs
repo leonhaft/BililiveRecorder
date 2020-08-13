@@ -23,5 +23,10 @@ namespace BililiveRecorder.WPF
         {
             InitializeComponent();
         }
+
+        protected void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
