@@ -401,7 +401,17 @@ namespace BililiveRecorder.WPF
             //sw.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             //sw.ShowDialog();
 
+            var workDirWin = new WorkDirectoryWindow
+            {
+                Owner = this,
+                WorkPath = WorkDirService.LastWorkDir(),
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                FirstRun = false
+            };
+            if (workDirWin.ShowDialog() == true)
+            {
 
+            }
         }
 
         private void ShowSettingsWindow()

@@ -22,6 +22,9 @@ namespace BililiveRecorder.WPF
 
         private Mutex mutex;
 
+        public bool FirstRun { get => _firstRun; set => _firstRun = value; }
+        private bool _firstRun = true;
+
         public WorkDirectoryWindow()
         {
             DataContext = this;
@@ -49,7 +52,7 @@ namespace BililiveRecorder.WPF
             }
         }
 
-        private void CheckPath()
+        private bool CheckPath()
         {
             string c = WorkPath;
             string config = Path.Combine(c, "config.json");
@@ -97,40 +100,48 @@ namespace BililiveRecorder.WPF
             {
                 Status = false;
             }
-            else
+            else if (FirstRun)
             {
-                if (mutex != null)
-                {
-                    try
-                    {
-                        mutex.ReleaseMutex();
-                    }
-                    catch (Exception)
-                    { }
-                    finally
-                    {
-                        mutex.Dispose();
-                        mutex = null;
-                    }
-                }
+                Restart();
+            }
+            return result;
+        }
+
+        private void Restart()
+        {
+            string c = WorkPath;
+
+            if (mutex != null)
+            {
                 try
                 {
-                    mutex = new Mutex(true, @"Global\BililiveRecorder.WPF.." + c.GetHashCode(), out bool createdNew);
-                    if (createdNew)
-                    {
-                        Status = true;
-                    }
-                    else
-                    {
-                        Status = false;
-                        StatusText = "已有录播姬在此文件夹运行";
-                    }
+                    mutex.ReleaseMutex();
                 }
                 catch (Exception)
+                { }
+                finally
+                {
+                    mutex.Dispose();
+                    mutex = null;
+                }
+            }
+            try
+            {
+                mutex = new Mutex(true, @"Global\BililiveRecorder.WPF.." + c.GetHashCode(), out bool createdNew);
+                if (createdNew)
+                {
+                    Status = true;
+                }
+                else
                 {
                     Status = false;
-                    StatusText = "检查录播姬运行状态时出错";
+                    StatusText = "已有录播姬在此文件夹运行";
                 }
+            }
+            catch (Exception)
+            {
+                Status = false;
+                StatusText = "检查录播姬运行状态时出错";
             }
         }
 
@@ -174,14 +185,60 @@ namespace BililiveRecorder.WPF
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            GC.KeepAlive(mutex);
-            DialogResult = true;
-            Close();
+            if (FirstRun)
+            {
+                GC.KeepAlive(mutex);
+                DialogResult = true;
+                Close();
+            }
+            else
+            {
+                var dialog = new ChoiceWindow
+                {
+                    Owner = this,
+                    Title = "选择是否立即更新",
+                    Message = "是否立即更新工作目录?是将程序将重新启动，正在录制的直播将中断,谨慎选择",
+                    ConfirmButtonText = "立即",
+                    DenyButtonText = "下次启动",
+                    WindowStartupLocation = WindowStartupLocation.CenterOwner
+                };
+                if (dialog.ShowDialog() == true)
+                {
+                    if (dialog.Result == MessageBoxResult.OK)
+                    {
+                        Restart();
+                        DialogResult = true;
+                    }
+                    else if (dialog.Result == MessageBoxResult.No)
+                    {
+                        var winDirService = new WorkDirService();
+                        winDirService.WriteNewWorkDir(WorkPath);
+                        DialogResult = true;
+                    }
+                    else if (dialog.Result == MessageBoxResult.Cancel)
+                    {
+                        DialogResult = true;
+                    }
+                }
+            }
         }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void BtnApply_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (FirstRun)
+            {
+                //BtnApply.Visibility = Visibility.Hidden;
+            }
         }
     }
 }
