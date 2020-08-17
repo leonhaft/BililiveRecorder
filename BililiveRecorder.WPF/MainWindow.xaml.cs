@@ -26,7 +26,9 @@ namespace BililiveRecorder.WPF
         private static readonly Regex UrlToRoomidRegex = new Regex(@"^https?:\/\/live\.bilibili\.com\/(?<roomid>\d+)(?:[#\?].*)?$", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
 
         private const int MAX_LOG_ROW = 25;
+
         private const string LAST_WORK_DIR_FILE = "lastworkdir";
+        private WorkDirService WorkDirService = new WorkDirService();
 
         private IContainer Container { get; set; }
         private ILifetimeScope RootScope { get; set; }
@@ -80,28 +82,23 @@ namespace BililiveRecorder.WPF
             bool skip_ui = false;
             string workdir = string.Empty;
 
-            CommandLineOption commandLineOption = null;
-            Parser.Default
-                .ParseArguments<CommandLineOption>(Environment.GetCommandLineArgs())
-                .WithParsed(x => commandLineOption = x);
-
-            if (commandLineOption?.WorkDirectory != null)
+            try
             {
-                skip_ui = true;
-                workdir = commandLineOption.WorkDirectory;
-            }
-
-            if (!skip_ui)
-            {
-                try
+                if (WorkDirService.IsChangeDir() == false)
                 {
-                    workdir = File.ReadAllText(LAST_WORK_DIR_FILE);
+                    // skip_ui = true;
                 }
-                catch (Exception) { }
+                workdir = WorkDirService.LastWorkDir();
+            }
+            catch (Exception) { }
+
+            if (skip_ui == false)
+            {
                 var wdw = new WorkDirectoryWindow()
                 {
                     Owner = this,
                     WorkPath = workdir,
+                    WindowStartupLocation = WindowStartupLocation.CenterOwner
                 };
 
                 if (wdw.ShowDialog() == true)
@@ -114,6 +111,7 @@ namespace BililiveRecorder.WPF
                     return;
                 }
             }
+
 
             if (!Recorder.Initialize(workdir))
             {
@@ -136,6 +134,7 @@ namespace BililiveRecorder.WPF
             {
                 Dispatcher?.InvokeAsync(() =>
                 {
+                    NotifyIcon.HideBalloonTip();
                     NotifyIcon.ShowBalloonTip($"{room.UserName}开播了！！！", room.Title, BalloonIcon.Info);
                 }, DispatcherPriority.Loaded);
             }
@@ -145,18 +144,21 @@ namespace BililiveRecorder.WPF
         {
             if (new TimedMessageBox
             {
+                Owner = this,
                 Title = "关闭录播姬？",
                 Message = "确定要关闭录播姬吗？",
                 CountDown = 10,
                 Left = Left,
-                Top = Top
+                Top = Top,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
             }.ShowDialog() == true)
             {
                 _AddLog = null;
                 Recorder.Shutdown();
                 try
                 {
-                    File.WriteAllText(LAST_WORK_DIR_FILE, Recorder.Config.WorkDirectory);
+                    WorkDirService.WriteLastWorkDir(Recorder.Config.WorkDirectory);
+                    //File.WriteAllText(LAST_WORK_DIR_FILE, Recorder.Config.WorkDirectory);
                 }
                 catch (Exception) { }
             }
@@ -392,9 +394,14 @@ namespace BililiveRecorder.WPF
 
         protected void TabSettingsButton_Click(object sender, RoutedEventArgs e)
         {
-            var sw = new TabSettingsWindow();
-            sw.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            sw.ShowDialog();
+            //var sw = new TabSettingsWindow(this, Recorder.Config)
+            //{
+            //    WorkPath = WorkDirService.LastWorkDir()
+            //};
+            //sw.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            //sw.ShowDialog();
+
+
         }
 
         private void ShowSettingsWindow()

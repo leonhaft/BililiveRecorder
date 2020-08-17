@@ -133,6 +133,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="..\TempBuildInfo\BuildInfo.WPF.cs" />
+    <Compile Include="ChoiceWindow.xaml.cs">
+      <DependentUpon>ChoiceWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ClickSelectTextBox.xaml.cs">
       <DependentUpon>ClickSelectTextBox.xaml</DependentUpon>
     </Compile>
@@ -154,6 +157,11 @@
     <Compile Include="WorkDirectoryWindow.xaml.cs">
       <DependentUpon>WorkDirectoryWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WorkDirService.cs" />
+    <Page Include="ChoiceWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ClickSelectTextBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
