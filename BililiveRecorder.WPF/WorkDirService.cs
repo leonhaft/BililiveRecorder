@@ -50,7 +50,7 @@ namespace BililiveRecorder.WPF
         /// <returns></returns>
         public string NewWorkDir()
         {
-            if (Directory.Exists(NEW_WORK_DIR_FILE))
+            if (File.Exists(NEW_WORK_DIR_FILE))
             {
                 return File.ReadAllText(NEW_WORK_DIR_FILE);
             }
@@ -59,10 +59,22 @@ namespace BililiveRecorder.WPF
         }
 
         /// <summary>
+        /// 删除新工作目录记录
+        /// </summary>
+        public void ClearNewWorkDir()
+        {
+            if (File.Exists(NEW_WORK_DIR_FILE))
+            {
+                File.Delete(NEW_WORK_DIR_FILE);
+            }
+
+        }
+
+        /// <summary>
         /// 是否变更了工作目录
         /// </summary>
         /// <returns></returns>
-        public bool IsChangeDir()
+        public bool IsChangedDir()
         {
             var last = LastWorkDir();
             var newDir = NewWorkDir();
@@ -71,7 +83,7 @@ namespace BililiveRecorder.WPF
                 return false;
             }
 
-            return string.Compare(last, newDir, true) == 0;
+            return string.Compare(last, newDir, true) != 0;
         }
     }
 }

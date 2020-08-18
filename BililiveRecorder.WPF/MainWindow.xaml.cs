@@ -27,7 +27,6 @@ namespace BililiveRecorder.WPF
 
         private const int MAX_LOG_ROW = 25;
 
-        private const string LAST_WORK_DIR_FILE = "lastworkdir";
         private WorkDirService WorkDirService = new WorkDirService();
 
         private IContainer Container { get; set; }
@@ -84,11 +83,16 @@ namespace BililiveRecorder.WPF
 
             try
             {
-                if (WorkDirService.IsChangeDir() == false)
+                if (WorkDirService.IsChangedDir())
                 {
-                    // skip_ui = true;
+                    workdir = WorkDirService.NewWorkDir();
+                    skip_ui = false;
                 }
-                workdir = WorkDirService.LastWorkDir();
+                else
+                {
+                    skip_ui = true;
+                    workdir = WorkDirService.LastWorkDir();
+                }
             }
             catch (Exception) { }
 
@@ -122,6 +126,11 @@ namespace BililiveRecorder.WPF
                 Environment.Exit(-2);
                 return;
             }
+            else
+            {
+                WorkDirService.WriteLastWorkDir(workdir);
+                WorkDirService.ClearNewWorkDir();
+            }
 
             NotifyIcon.Visibility = Visibility.Visible;
             RoomNotifyEvent.NotifyEvent += RoomNotifyEvent_NotifyEvent;
@@ -142,7 +151,7 @@ namespace BililiveRecorder.WPF
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (new TimedMessageBox
+            var closeDialog = new TimedMessageBox
             {
                 Owner = this,
                 Title = "关闭录播姬？",
@@ -151,16 +160,10 @@ namespace BililiveRecorder.WPF
                 Left = Left,
                 Top = Top,
                 WindowStartupLocation = WindowStartupLocation.CenterOwner
-            }.ShowDialog() == true)
+            };
+            if (closeDialog.ShowDialog() == true)
             {
-                _AddLog = null;
-                Recorder.Shutdown();
-                try
-                {
-                    WorkDirService.WriteLastWorkDir(Recorder.Config.WorkDirectory);
-                    //File.WriteAllText(LAST_WORK_DIR_FILE, Recorder.Config.WorkDirectory);
-                }
-                catch (Exception) { }
+                Stop();
             }
             else
             {
@@ -410,7 +413,25 @@ namespace BililiveRecorder.WPF
             };
             if (workDirWin.ShowDialog() == true)
             {
+                var userChoice = workDirWin.WorkDirectorySelectResult;
+                var userSelectFolder = workDirWin.WorkPath;
+                if (userChoice == WorkDirectoryDialogResult.Immediately)
+                {
+                    WorkDirService.WriteNewWorkDir(userSelectFolder);
+                    Restart();
+                }
+                else if (userChoice == WorkDirectoryDialogResult.NextRun)
+                {
+                    WorkDirService.WriteNewWorkDir(userSelectFolder);
+                }
+                else if (userChoice == WorkDirectoryDialogResult.Cancel)
+                {
 
+                }
+                else
+                {
+                    AddLog("未知用户操作");
+                }
             }
         }
 
@@ -448,6 +469,25 @@ namespace BililiveRecorder.WPF
             Topmost ^= true;
             Topmost ^= true;
             Focus();
+        }
+
+        private void Restart()
+        {
+            Stop();
+            System.Diagnostics.Process.Start(Application.ResourceAssembly.Location); // to start new instance of application
+            Application.Current.Shutdown();
+        }
+
+        private void Stop()
+        {
+            _AddLog = null;
+            Recorder.Shutdown();
+            try
+            {
+                WorkDirService.WriteLastWorkDir(Recorder.Config.WorkDirectory);
+                //File.WriteAllText(LAST_WORK_DIR_FILE, Recorder.Config.WorkDirectory);
+            }
+            catch (Exception) { }
         }
     }
 }

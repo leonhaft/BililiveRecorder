@@ -179,6 +179,7 @@
     <Compile Include="UpdateBarUserControl.xaml.cs">
       <DependentUpon>UpdateBarUserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WorkDirectoryDialogResult.cs" />
     <Compile Include="WorkDirectoryWindow.xaml.cs">
       <DependentUpon>WorkDirectoryWindow.xaml</DependentUpon>
     </Compile>
