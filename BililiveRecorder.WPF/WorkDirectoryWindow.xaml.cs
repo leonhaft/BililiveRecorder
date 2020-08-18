@@ -22,6 +22,22 @@ namespace BililiveRecorder.WPF
 
         private Mutex mutex;
 
+        public bool FirstRun { get => _firstRun; set => _firstRun = value; }
+        private bool _firstRun = true;
+        private string _workPath;
+        public string WorkPath { get => _workPath; set => SetField(ref _workPath, value.TrimEnd('/', '\\')); }
+
+        private string _statusText = "请选择目录";
+        public string StatusText { get => _statusText; set => SetField(ref _statusText, value); }
+
+        private SolidColorBrush _statusColor = Red;
+        public SolidColorBrush StatusColor { get => _statusColor; set => SetField(ref _statusColor, value); }
+
+        private bool _status;
+        public bool Status { get => _status; set => SetField(ref _status, value); }
+
+        public WorkDirectoryDialogResult WorkDirectorySelectResult { get; private set; }
+
         public WorkDirectoryWindow()
         {
             DataContext = this;
@@ -134,18 +150,6 @@ namespace BililiveRecorder.WPF
             }
         }
 
-        private string _workPath;
-        public string WorkPath { get => _workPath; set => SetField(ref _workPath, value.TrimEnd('/', '\\')); }
-
-        private string _statusText = "请选择目录";
-        public string StatusText { get => _statusText; set => SetField(ref _statusText, value); }
-
-        private SolidColorBrush _statusColor = Red;
-        public SolidColorBrush StatusColor { get => _statusColor; set => SetField(ref _statusColor, value); }
-
-        private bool _status;
-        public bool Status { get => _status; set => SetField(ref _status, value); }
-
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             var fileDialog = new CommonOpenFileDialog()
@@ -176,12 +180,56 @@ namespace BililiveRecorder.WPF
         {
             GC.KeepAlive(mutex);
             DialogResult = true;
+            WorkDirectorySelectResult = WorkDirectoryDialogResult.NextRun;
             Close();
         }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
+            WorkDirectorySelectResult = WorkDirectoryDialogResult.Cancel;
             Close();
+        }
+
+        private void BtnApply_Click(object sender, RoutedEventArgs e)
+        {
+            GC.KeepAlive(mutex);
+            DialogResult = true;
+            WorkDirectorySelectResult = WorkDirectoryDialogResult.Immediately;
+            Close();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (FirstRun)
+            {
+                BtnApply.Visibility = Visibility.Hidden;
+                TxtNotes.Visibility = Visibility.Hidden;
+            }
+            else
+            {
+                BtnCancel.Content = "取消";
+                BtnOk.Content = "下次启动更新";
+                BtnOk.Width = 80;
+                Status = false;
+            }
+
+            BtnApply.Margin = new Thickness { Left = CalculatorMargin(), Right = 10, Top = -20, Bottom = 10 };
+
+        }
+
+        private double CalculatorMargin()
+        {
+            var margin = (this.Width - BtnApply.Width - BtnOk.Width - BtnCancel.Width) / 2;
+            if (FirstRun)
+            {
+                margin = margin - BtnApply.Width;
+            }
+            else
+            {
+                margin -= 20;
+            }
+
+            return Math.Round(margin);
         }
     }
 }

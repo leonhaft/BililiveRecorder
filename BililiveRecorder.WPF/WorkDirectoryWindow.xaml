@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BililiveRecorder.WPF"
         mc:Ignorable="d" ResizeMode="NoResize"
-        Title="录播姬 - 选择工作目录" Height="300" Width="400">
+        Title="录播姬 - 选择工作目录"  Height="360" Width="640" Loaded="Window_Loaded">
     <Grid Margin="15">
         <Grid.RowDefinitions>
             <RowDefinition Height="3*"/>
@@ -42,24 +42,16 @@
             </TextBlock>
         </Grid>
         <Grid Grid.Row="3">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.Resources>
-                <Style TargetType="Button">
-                    <Setter Property="VerticalAlignment" Value="Center"/>
-                    <Setter Property="HorizontalAlignment" Value="Center"/>
-                    <Setter Property="Padding" Value="20,10"/>
-                    <Setter Property="FontSize" Value="16"/>
-                </Style>
-            </Grid.Resources>
-            <Button IsEnabled="{Binding Status}" IsDefault="True" Click="Button_Click_1">
-                确认
-            </Button>
-            <Button Grid.Column="1" IsCancel="True" Click="Button_Click_2">
-                退出
-            </Button>
+            <StackPanel  Orientation="Horizontal" FlowDirection="LeftToRight">
+                <Button Margin="200 -20 10 10" Height="30" Width="80"  Foreground ="Red" IsEnabled="{Binding Status}"  Name="BtnApply"  Content="立即更新" Click="BtnApply_Click"/>
+                <Button Margin="10 -20 10 10" Height="30" Width="60"   IsEnabled="{Binding Status}" Name="BtnOk" Content="确认"  IsDefault="True" Click="Button_Click_1"/>
+                <Button Margin="10 -20 10 10" Height="30"  Width="60"   IsCancel="True" Name="BtnCancel" Content="退出" Click="Button_Click_2"/>
+                    <TextBlock Name="TxtNotes"  Margin="-420,50,0,10"  Width="Auto">
+                    选择立即更新将中断正在录制的直播,选择下次更新将在下次打开程序是更新工作目录,选择取消将不修改
+                    </TextBlock>
+              
+            </StackPanel>
+
         </Grid>
     </Grid>
 </Window>

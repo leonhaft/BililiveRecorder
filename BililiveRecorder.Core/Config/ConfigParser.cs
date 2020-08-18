@@ -75,7 +75,7 @@ namespace BililiveRecorder.Core.Config
                 {
                     Version = 1,
                     Data = data
-                });
+                }, Formatting.Indented);
                 File.WriteAllText(filepath, cw);
                 return true;
             }

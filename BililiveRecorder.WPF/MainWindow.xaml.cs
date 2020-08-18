@@ -26,7 +26,8 @@ namespace BililiveRecorder.WPF
         private static readonly Regex UrlToRoomidRegex = new Regex(@"^https?:\/\/live\.bilibili\.com\/(?<roomid>\d+)(?:[#\?].*)?$", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
 
         private const int MAX_LOG_ROW = 25;
-        private const string LAST_WORK_DIR_FILE = "lastworkdir";
+
+        private WorkDirService WorkDirService = new WorkDirService();
 
         private IContainer Container { get; set; }
         private ILifetimeScope RootScope { get; set; }
@@ -80,28 +81,28 @@ namespace BililiveRecorder.WPF
             bool skip_ui = false;
             string workdir = string.Empty;
 
-            CommandLineOption commandLineOption = null;
-            Parser.Default
-                .ParseArguments<CommandLineOption>(Environment.GetCommandLineArgs())
-                .WithParsed(x => commandLineOption = x);
-
-            if (commandLineOption?.WorkDirectory != null)
+            try
             {
-                skip_ui = true;
-                workdir = commandLineOption.WorkDirectory;
-            }
-
-            if (!skip_ui)
-            {
-                try
+                if (WorkDirService.IsChangedDir())
                 {
-                    workdir = File.ReadAllText(LAST_WORK_DIR_FILE);
+                    workdir = WorkDirService.NewWorkDir();
+                    skip_ui = false;
                 }
-                catch (Exception) { }
+                else
+                {
+                    skip_ui = true;
+                    workdir = WorkDirService.LastWorkDir();
+                }
+            }
+            catch (Exception) { }
+
+            if (skip_ui == false)
+            {
                 var wdw = new WorkDirectoryWindow()
                 {
                     Owner = this,
                     WorkPath = workdir,
+                    WindowStartupLocation = WindowStartupLocation.CenterOwner
                 };
 
                 if (wdw.ShowDialog() == true)
@@ -115,6 +116,7 @@ namespace BililiveRecorder.WPF
                 }
             }
 
+
             if (!Recorder.Initialize(workdir))
             {
                 if (!skip_ui)
@@ -123,6 +125,11 @@ namespace BililiveRecorder.WPF
                 }
                 Environment.Exit(-2);
                 return;
+            }
+            else
+            {
+                WorkDirService.WriteLastWorkDir(workdir);
+                WorkDirService.ClearNewWorkDir();
             }
 
             NotifyIcon.Visibility = Visibility.Visible;
@@ -134,28 +141,29 @@ namespace BililiveRecorder.WPF
             var room = sender as RoomInfo;
             if (room != null && room.IsStreaming && room.IsNotify)
             {
-                NotifyIcon.ShowBalloonTip("", $"{room.UserName}开播了！！！", BalloonIcon.Info);
+                Dispatcher?.InvokeAsync(() =>
+                {
+                    NotifyIcon.HideBalloonTip();
+                    NotifyIcon.ShowBalloonTip($"{room.UserName}开播了！！！", room.Title, BalloonIcon.Info);
+                }, DispatcherPriority.Loaded);
             }
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (new TimedMessageBox
+            var closeDialog = new TimedMessageBox
             {
+                Owner = this,
                 Title = "关闭录播姬？",
                 Message = "确定要关闭录播姬吗？",
                 CountDown = 10,
                 Left = Left,
-                Top = Top
-            }.ShowDialog() == true)
+                Top = Top,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
+            };
+            if (closeDialog.ShowDialog() == true)
             {
-                _AddLog = null;
-                Recorder.Shutdown();
-                try
-                {
-                    File.WriteAllText(LAST_WORK_DIR_FILE, Recorder.Config.WorkDirectory);
-                }
-                catch (Exception) { }
+                Stop();
             }
             else
             {
@@ -386,6 +394,47 @@ namespace BililiveRecorder.WPF
             ShowSettingsWindow();
         }
 
+
+        protected void TabSettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            //var sw = new TabSettingsWindow(this, Recorder.Config)
+            //{
+            //    WorkPath = WorkDirService.LastWorkDir()
+            //};
+            //sw.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            //sw.ShowDialog();
+
+            var workDirWin = new WorkDirectoryWindow
+            {
+                Owner = this,
+                WorkPath = WorkDirService.LastWorkDir(),
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                FirstRun = false
+            };
+            if (workDirWin.ShowDialog() == true)
+            {
+                var userChoice = workDirWin.WorkDirectorySelectResult;
+                var userSelectFolder = workDirWin.WorkPath;
+                if (userChoice == WorkDirectoryDialogResult.Immediately)
+                {
+                    WorkDirService.WriteNewWorkDir(userSelectFolder);
+                    Restart();
+                }
+                else if (userChoice == WorkDirectoryDialogResult.NextRun)
+                {
+                    WorkDirService.WriteNewWorkDir(userSelectFolder);
+                }
+                else if (userChoice == WorkDirectoryDialogResult.Cancel)
+                {
+
+                }
+                else
+                {
+                    AddLog("未知用户操作");
+                }
+            }
+        }
+
         private void ShowSettingsWindow()
         {
             var sw = new SettingsWindow(this, Recorder.Config);
@@ -420,6 +469,25 @@ namespace BililiveRecorder.WPF
             Topmost ^= true;
             Topmost ^= true;
             Focus();
+        }
+
+        private void Restart()
+        {
+            Stop();
+            System.Diagnostics.Process.Start(Application.ResourceAssembly.Location); // to start new instance of application
+            Application.Current.Shutdown();
+        }
+
+        private void Stop()
+        {
+            _AddLog = null;
+            Recorder.Shutdown();
+            try
+            {
+                WorkDirService.WriteLastWorkDir(Recorder.Config.WorkDirectory);
+                //File.WriteAllText(LAST_WORK_DIR_FILE, Recorder.Config.WorkDirectory);
+            }
+            catch (Exception) { }
         }
     }
 }
