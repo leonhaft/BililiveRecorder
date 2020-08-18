@@ -52,7 +52,7 @@ namespace BililiveRecorder.WPF
             }
         }
 
-        private bool CheckPath()
+        private void CheckPath()
         {
             string c = WorkPath;
             string config = Path.Combine(c, "config.json");
@@ -100,49 +100,49 @@ namespace BililiveRecorder.WPF
             {
                 Status = false;
             }
-            else if (FirstRun)
+            else
             {
-                Restart();
+                if (mutex != null)
+                {
+                    try
+                    {
+                        mutex.ReleaseMutex();
+                    }
+                    catch (Exception)
+                    { }
+                    finally
+                    {
+                        mutex.Dispose();
+                        mutex = null;
+                    }
+                }
+                try
+                {
+                    mutex = new Mutex(true, @"Global\BililiveRecorder.WPF.." + c.GetHashCode(), out bool createdNew);
+                    if (createdNew)
+                    {
+                        Status = true;
+                    }
+                    else
+                    {
+                        Status = false;
+                        StatusText = "已有录播姬在此文件夹运行";
+                    }
+                }
+                catch (Exception)
+                {
+                    Status = false;
+                    StatusText = "检查录播姬运行状态时出错";
+                }
             }
-            return result;
         }
 
         private void Restart()
         {
-            string c = WorkPath;
+            System.Diagnostics.Process.Start(Application.ResourceAssembly.Location); // to start new instance of application
+            this.Close(); //to turn off current app
 
-            if (mutex != null)
-            {
-                try
-                {
-                    mutex.ReleaseMutex();
-                }
-                catch (Exception)
-                { }
-                finally
-                {
-                    mutex.Dispose();
-                    mutex = null;
-                }
-            }
-            try
-            {
-                mutex = new Mutex(true, @"Global\BililiveRecorder.WPF.." + c.GetHashCode(), out bool createdNew);
-                if (createdNew)
-                {
-                    Status = true;
-                }
-                else
-                {
-                    Status = false;
-                    StatusText = "已有录播姬在此文件夹运行";
-                }
-            }
-            catch (Exception)
-            {
-                Status = false;
-                StatusText = "检查录播姬运行状态时出错";
-            }
+
         }
 
         private string _workPath;
@@ -204,7 +204,7 @@ namespace BililiveRecorder.WPF
                 };
                 if (dialog.ShowDialog() == true)
                 {
-                    if (dialog.Result == MessageBoxResult.OK)
+                    if (dialog.Result == MessageBoxResult.Yes)
                     {
                         Restart();
                         DialogResult = true;

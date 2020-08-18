@@ -85,14 +85,14 @@ namespace BililiveRecorder.WPF
         private void ConfirmClick(object sender, RoutedEventArgs e)
         {
             Result = MessageBoxResult.Yes;
-
+            DialogResult = true;
             Close();
         }
 
         private void DenyClick(object sender, RoutedEventArgs e)
         {
             Result = MessageBoxResult.No;
-
+            DialogResult = true;
             Close();
         }
 
