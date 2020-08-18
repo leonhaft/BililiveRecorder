@@ -210,6 +210,7 @@ namespace BililiveRecorder.WPF
                 BtnCancel.Content = "取消";
                 BtnOk.Content = "下次启动更新";
                 BtnOk.Width = 80;
+                Status = false;
             }
 
             BtnApply.Margin = new Thickness { Left = CalculatorMargin(), Right = 10, Top = -20, Bottom = 10 };
