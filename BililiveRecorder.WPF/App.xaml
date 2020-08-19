@@ -4,3 +4,4 @@
              xmlns:local="clr-namespace:BililiveRecorder.WPF"
              Startup="CheckUpdate"
              StartupUri="MainWindow.xaml"/>
+

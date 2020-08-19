@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <Version>0.0.0.0</Version>
     <Authors>Genteure</Authors>
     <Company>Genteure</Company>
@@ -20,8 +20,8 @@
     <Compile Include="..\TempBuildInfo\BuildInfo.FlvProcessor.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="4.8.1" />
-    <PackageReference Include="NLog" Version="4.5.10" />
+    <PackageReference Include="Autofac" Version="5.2.0" />
+    <PackageReference Include="NLog" Version="4.7.3" />
   </ItemGroup>
   <PropertyGroup>
     <PreBuildEvent>cd $(SolutionDir)

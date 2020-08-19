@@ -90,8 +90,15 @@ namespace BililiveRecorder.WPF
                 }
                 else
                 {
-                    skip_ui = true;
                     workdir = WorkDirService.LastWorkDir();
+                    if (workdir == string.Empty)
+                    {
+                        skip_ui = false;
+                    }
+                    else
+                    {
+                        skip_ui = true;
+                    }
                 }
             }
             catch (Exception) { }
@@ -474,7 +481,8 @@ namespace BililiveRecorder.WPF
         private void Restart()
         {
             Stop();
-            System.Diagnostics.Process.Start(Application.ResourceAssembly.Location); // to start new instance of application
+            var executePath = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
+            System.Diagnostics.Process.Start(executePath); // to start new instance of application
             Application.Current.Shutdown();
         }
 
@@ -489,5 +497,7 @@ namespace BililiveRecorder.WPF
             }
             catch (Exception) { }
         }
+
+
     }
 }

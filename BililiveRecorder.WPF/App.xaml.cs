@@ -1,6 +1,9 @@
 ﻿using NLog;
-using Squirrel;
+using NLog.Targets.Wrappers;
 using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -26,6 +29,7 @@ namespace BililiveRecorder.WPF
 
         private async Task RunCheckUpdate()
         {
+            /*
             try
             {
                 if (!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("BILILIVE_RECORDER_DISABLE_UPDATE"))) { return; }
@@ -74,6 +78,7 @@ namespace BililiveRecorder.WPF
             {
                 logger.Error(ex, "检查更新时出错，如持续出错请联系开发者 rec@danmuji.org");
             }
+            */
         }
     }
 }

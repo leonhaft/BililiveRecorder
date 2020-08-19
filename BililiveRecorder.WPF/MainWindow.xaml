@@ -26,7 +26,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <!--<local:UpdateBarUserControl Grid.Row="0" x:Name="UpdateBar"/>-->
-        <tb:TaskbarIcon x:Name="NotifyIcon" Visibility="Collapsed" IconSource="/ico.ico" TrayLeftMouseUp="Taskbar_Click">
+        <tb:TaskbarIcon x:Name="NotifyIcon" Visibility="Collapsed" IconSource="ico.ico" TrayLeftMouseUp="Taskbar_Click">
             <tb:TaskbarIcon.TrayToolTip>
                 <Border BorderBrush="Black" BorderThickness="1" Background="White" CornerRadius="1">
                     <StackPanel Margin="5">
