@@ -24,6 +24,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
         <!--<local:UpdateBarUserControl Grid.Row="0" x:Name="UpdateBar"/>-->
         <tb:TaskbarIcon x:Name="NotifyIcon" Visibility="Collapsed" IconSource="ico.ico" TrayLeftMouseUp="Taskbar_Click">
@@ -111,7 +112,7 @@
                     <DataGridTextColumn Binding="{Binding Processor.Clips.Count,Mode=OneWay}" Header="剪辑数量"/>
                 </DataGrid.Columns>
             </DataGrid>
-            <ItemsControl Grid.Row="1" Grid.RowSpan="2" x:Name="Log" ItemsSource="{Binding Logs}" ItemTemplate="{StaticResource LogTemplate}" ToolTip="右键点击可以复制单行日志">
+            <ItemsControl Grid.Row="1" Grid.RowSpan="2" x:Name="Log" ToolTip="右键点击可以复制单行日志">
                 <ItemsControl.Template>
                     <ControlTemplate>
                         <ScrollViewer x:Name="LogScroll" CanContentScroll="True">
@@ -215,7 +216,7 @@
                     <Button Grid.Column="0" Margin="5,2" Click="EnableAllAutoRec">启用所有直播间</Button>
                     <Button Grid.Column="1" Margin="5,2" Click="DisableAllAutoRec">禁用所有直播间</Button>
                 </Grid>
-               
+
             </Grid>
             <Grid Grid.Column="1" Grid.Row="3">
                 <Grid.ColumnDefinitions>
@@ -226,5 +227,13 @@
                 <Button x:Name="SettingsButton" Click="SettingsButton_Click" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="50" Height="30" Margin="10 10" Content="设置" Grid.Column="1"/>
             </Grid>
         </Grid>
+        <DockPanel Grid.Row="2" >
+            <StatusBar DockPanel.Dock="Bottom" >
+                
+            </StatusBar>
+        </DockPanel>
     </Grid>
+
+
+
 </Window>
