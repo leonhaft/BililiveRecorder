@@ -53,5 +53,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
+    <PropertyGroup>
+        <PreBuildEvent>
+            cd $(SolutionDir)
+            powershell -ExecutionPolicy Bypass -File .\CI\patch_buildinfo.ps1 WPF
+        </PreBuildEvent>
+    </PropertyGroup>
 </Project>
