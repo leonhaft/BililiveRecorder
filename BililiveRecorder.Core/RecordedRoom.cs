@@ -19,19 +19,19 @@ namespace BililiveRecorder.Core
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
         private static readonly Random random = new Random();
 
-        private int _roomid;
+        private int? _roomid;
         private int _realRoomid;
         private string _streamerName;
         private string _title;
         private bool _isLiving;
         private bool _isNotify;
 
-        public int ShortRoomId
+        public int? ShortRoomId
         {
             get => _roomid;
             private set
             {
-                if (value == _roomid) { return; }
+                if (value == _roomid && value.HasValue == false && value < 1) { return; }
                 _roomid = value;
                 TriggerPropertyChanged(nameof(ShortRoomId));
             }
@@ -177,7 +177,7 @@ namespace BililiveRecorder.Core
             if (e.RoomInfo != null)
             {
                 RoomId = e.RoomInfo.RoomId;
-                ShortRoomId = e.RoomInfo.ShortRoomId;
+                ShortRoomId = e.RoomInfo.ShortRoomId.HasValue && e.RoomInfo.ShortRoomId != 0 ? e.RoomInfo.ShortRoomId : null;
                 StreamerName = e.RoomInfo.UserName;
                 Title = e.RoomInfo.Title;
                 //直播状态发生变化时设置直播状态,触发开播通知

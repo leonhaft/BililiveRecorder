@@ -86,7 +86,7 @@
                       AutoGenerateColumns="False" IsReadOnly="True"
                     HorizontalGridLinesBrush="{StaticResource GridLinesBrush}"
 					VerticalGridLinesBrush="{StaticResource GridLinesBrush}"
-					Background="Transparent"
+					Background="Transparent"  CanUserSortColumns="False"
 					BorderThickness="1"
 					BorderBrush="{StaticResource GridLinesBrush}">
                 <DataGrid.Resources>

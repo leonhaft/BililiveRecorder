@@ -6,7 +6,7 @@ namespace BililiveRecorder.Core
 {
     public interface IRecordedRoom : INotifyPropertyChanged, IDisposable
     {
-        int ShortRoomId { get; }
+        int? ShortRoomId { get; }
         int RoomId { get; }
         string StreamerName { get; }
         bool IsNotify { get; }
