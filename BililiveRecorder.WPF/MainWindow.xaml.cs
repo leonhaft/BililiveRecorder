@@ -462,11 +462,11 @@ namespace BililiveRecorder.WPF
 
         private void Window_StateChanged(object sender, EventArgs e)
         {
-            //if (WindowState == WindowState.Minimized)
-            //{
-            //    Hide();
-            //    NotifyIcon.ShowBalloonTip("B站录播姬", "录播姬已最小化到托盘，左键单击图标恢复界面。", BalloonIcon.Info);
-            //}
+            if (WindowState == WindowState.Minimized)
+            {
+                Hide();
+                //NotifyIcon.ShowBalloonTip("B站录播姬", "录播姬已最小化到托盘，左键单击图标恢复界面。", BalloonIcon.Info);
+            }
         }
 
         private void Taskbar_Click(object sender, RoutedEventArgs e)
