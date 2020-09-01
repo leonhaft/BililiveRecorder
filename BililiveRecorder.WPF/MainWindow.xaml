@@ -5,6 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:tb="http://www.hardcodet.net/taskbar"
         xmlns:local="clr-namespace:BililiveRecorder.WPF"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto"        
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
         mc:Ignorable="d"
         MinHeight="400" MinWidth="650"
         Title="录播姬" Height="720" Width="1280"
@@ -77,24 +85,15 @@
                 <RowDefinition Height="4*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2.5*"/>
+                <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
             <DataGrid x:Name="RoomList" ItemsSource="{Binding Recorder}"
                       SelectionMode="Extended" SelectionUnit="FullRow"
                       CanUserAddRows="False" CanUserDeleteRows="False"
                       AutoGenerateColumns="False" IsReadOnly="True"
-                    HorizontalGridLinesBrush="{StaticResource GridLinesBrush}"
-					VerticalGridLinesBrush="{StaticResource GridLinesBrush}"
-					Background="Transparent"  CanUserSortColumns="False"
-					BorderThickness="1"
-					BorderBrush="{StaticResource GridLinesBrush}">
-                <DataGrid.Resources>
-                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
-                    <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
-                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
-                    <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="Black" />
-                </DataGrid.Resources>
+>
+               
                 <DataGrid.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="浏览器打开直播间" Click="OpenRoomInBrowser"></MenuItem>
@@ -203,10 +202,10 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Button Grid.Column="0" Margin="5,0" Click="EnableAutoRec">启用自动录制</Button>
-                    <Button Grid.Column="1" Margin="5,0" Click="DisableAutoRec">禁用自动录制</Button>
-                    <Button Grid.Row="1" Grid.Column="0" Margin="5" Click="TriggerRec">手动触发开始录制</Button>
-                    <Button Grid.Row="1" Grid.Column="1" Margin="5" Click="CutRec">切断当前录制</Button>
+                    <Button Style="{StaticResource MaterialDesignRaisedLightButton}" Grid.Column="0" Margin="5,0" Click="EnableAutoRec">启用自动录制</Button>
+                    <Button Style="{StaticResource MaterialDesignRaisedLightButton}" Grid.Column="1" Margin="5,0" Click="DisableAutoRec">禁用自动录制</Button>
+                    <Button Style="{StaticResource MaterialDesignRaisedLightButton}" Grid.Row="1" Grid.Column="0" Margin="5" Click="TriggerRec">手动触发开始录制</Button>
+                    <Button Style="{StaticResource MaterialDesignRaisedLightButton}" Grid.Row="1" Grid.Column="1" Margin="5" Click="CutRec">切断当前录制</Button>
                 </Grid>
             </Grid>
             <Grid Grid.Column="1" Grid.Row="1">
@@ -231,8 +230,8 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Button Grid.Column="0" Margin="5,2" Click="EnableAllAutoRec">启用所有直播间</Button>
-                    <Button Grid.Column="1" Margin="5,2" Click="DisableAllAutoRec">禁用所有直播间</Button>
+                    <Button Style="{StaticResource MaterialDesignRaisedLightButton}" Grid.Column="0" Margin="5,2" Click="EnableAllAutoRec">启用所有直播间</Button>
+                    <Button Style="{StaticResource MaterialDesignRaisedLightButton}" Grid.Column="1" Margin="5,2" Click="DisableAllAutoRec">禁用所有直播间</Button>
                 </Grid>
 
             </Grid>
@@ -241,8 +240,8 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="TabSettingsButton" Click="TabSettingsButton_Click" Visibility="Visible" HorizontalAlignment="Right" Width="80" Height="30" VerticalAlignment="Bottom" Margin="10,10" Content="修改工作目录" Grid.Column="0"/>
-                <Button x:Name="SettingsButton" Click="SettingsButton_Click" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="50" Height="30" Margin="10 10" Content="设置" Grid.Column="1"/>
+                <Button x:Name="TabSettingsButton" Click="TabSettingsButton_Click" Visibility="Visible" HorizontalAlignment="Right" Width="120" Height="30" VerticalAlignment="Bottom" Margin="10,10" Content="修改工作目录" Grid.Column="0"/>
+                <Button x:Name="SettingsButton" Click="SettingsButton_Click" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="80" Height="30" Margin="10 10" Content="设置" Grid.Column="1"/>
             </Grid>
         </Grid>
     </Grid>
