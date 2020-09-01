@@ -6,8 +6,10 @@ using Hardcodet.Wpf.TaskbarNotification;
 using NLog;
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
@@ -308,6 +310,17 @@ namespace BililiveRecorder.WPF
             rr.RefreshRoomInfo();
         }
 
+        private void OpenRoomInBrowser(object sender, RoutedEventArgs e)
+        {
+            var rr = (IRecordedRoom)((DataGrid)((ContextMenu)((MenuItem)sender)?.Parent)?.PlacementTarget)?.SelectedItem;
+            if (rr == null)
+            {
+                return;
+            }
+
+            OpenUrl($"https://live.bilibili.com/{rr.RoomId}");
+        }
+
         /// <summary>
         /// 全部直播间启用自动录制
         /// </summary>
@@ -498,6 +511,33 @@ namespace BililiveRecorder.WPF
             catch (Exception) { }
         }
 
-
+        private void OpenUrl(string url)
+        {
+            try
+            {
+                Process.Start(url);
+            }
+            catch
+            {
+                // hack because of this: https://github.com/dotnet/corefx/issues/10361
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    url = url.Replace("&", "^&");
+                    Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                {
+                    Process.Start("xdg-open", url);
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                {
+                    Process.Start("open", url);
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
     }
 }
