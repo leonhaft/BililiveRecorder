@@ -13,74 +13,74 @@
         <ResourceDictionary>
             <SolidColorBrush Color="LightGray" x:Key="GridLinesBrush" />
             <SolidColorBrush x:Key="DisabledBackgroundBrush" Color="LightGray" />
-
         </ResourceDictionary>
     </Window.Resources>
-    <Grid>
-        <Grid.Resources>
-            <ResourceDictionary>
-                <DataTemplate x:Key="LogTemplate" >
-                    <TextBlock Text="{Binding}" TextWrapping="Wrap" MouseRightButtonUp="TextBlock_MouseRightButtonUp"/>
-                </DataTemplate>
-                <local:RecordStatusConverter x:Key="RSC"/>
-                <local:BoolToStringConverter x:Key="RecordStatusConverter" TrueValue="录制中" FalseValue="闲置"/>
-                <local:BoolToStringConverter x:Key="MonitorStatusConverter" TrueValue="自动录制" FalseValue="非自动"/>
-                <local:BoolToStringConverter x:Key="LiveStatusConverter" TrueValue="正在直播" FalseValue="修仙中"/>
-            </ResourceDictionary>
-        </Grid.Resources>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <!--<local:UpdateBarUserControl Grid.Row="0" x:Name="UpdateBar"/>-->
-        <tb:TaskbarIcon x:Name="NotifyIcon" Visibility="Collapsed" IconSource="ico.ico" TrayLeftMouseUp="Taskbar_Click">
-            <tb:TaskbarIcon.TrayToolTip>
-                <Border BorderBrush="Black" BorderThickness="1" Background="White" CornerRadius="1">
-                    <StackPanel Margin="5">
-                        <TextBlock FontSize="14" Text="{Binding Title}"/>
-                        <TextBlock FontSize="13" Text="{Binding Recorder.Config.WorkDirectory,Mode=OneWay}" Margin="0,0,0,7"/>
-                        <ItemsControl ItemsSource="{Binding Recorder}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock>
-                                            <TextBlock.Text>
-                                                <MultiBinding Converter="{StaticResource RSC}" Mode="OneWay">
-                                                    <Binding Path="IsMonitoring" Mode="OneWay"/>
-                                                    <Binding Path="IsRecording" Mode="OneWay"/>
-                                                </MultiBinding>
-                                            </TextBlock.Text>
-                                        </TextBlock>
-                                        <TextBlock Text="{Binding DownloadSpeedPersentage,StringFormat=0.##%,Mode=OneWay}" Margin="5,0,0,0"/>
-                                        <TextBlock Margin="5,0" Text="{Binding RealRoomid,Mode=OneWay}"/>
-                                        <TextBlock Text="{Binding StreamerName,Mode=OneWay}"/>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </StackPanel>
-                </Border>
-            </tb:TaskbarIcon.TrayToolTip>
-            <tb:TaskbarIcon.ContextMenu>
-                <ContextMenu DataContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
-                    <!--<MenuItem IsCheckable="True">不弹出提醒</MenuItem>-->
-                    <MenuItem Header="退出">
-                        <MenuItem Header="确认退出" Click="Taskbar_Quit_Click"/>
-                    </MenuItem>
-                </ContextMenu>
-            </tb:TaskbarIcon.ContextMenu>
-        </tb:TaskbarIcon>
-        <Grid Grid.Row="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="7*"/>
-                <RowDefinition Height="4*"/>
-                <RowDefinition Height="4*"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3.5*"/>
-                <ColumnDefinition Width="1*"/>
-            </Grid.ColumnDefinitions>
-            <DataGrid x:Name="RoomList" ItemsSource="{Binding Recorder}"
+    <TabControl x:Name="TabControl" AllowDrop="True">
+        <TabItem Header="录播机">
+            <DockPanel>
+                <Grid>
+                    <Grid.Resources>
+                        <ResourceDictionary>
+                         
+                            <local:RecordStatusConverter x:Key="RSC"/>
+                            <local:BoolToStringConverter x:Key="RecordStatusConverter" TrueValue="录制中" FalseValue="闲置"/>
+                            <local:BoolToStringConverter x:Key="MonitorStatusConverter" TrueValue="自动录制" FalseValue="非自动"/>
+                            <local:BoolToStringConverter x:Key="LiveStatusConverter" TrueValue="正在直播" FalseValue="修仙中"/>
+                        </ResourceDictionary>
+                    </Grid.Resources>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <!--<local:UpdateBarUserControl Grid.Row="0" x:Name="UpdateBar"/>-->
+                    <tb:TaskbarIcon x:Name="NotifyIcon" Visibility="Collapsed" IconSource="ico.ico" TrayLeftMouseUp="Taskbar_Click">
+                        <tb:TaskbarIcon.TrayToolTip>
+                            <Border BorderBrush="Black" BorderThickness="1" Background="White" CornerRadius="1">
+                                <StackPanel Margin="5">
+                                    <TextBlock FontSize="14" Text="{Binding Title}"/>
+                                    <TextBlock FontSize="13" Text="{Binding Recorder.Config.WorkDirectory,Mode=OneWay}" Margin="0,0,0,7"/>
+                                    <ItemsControl ItemsSource="{Binding Recorder}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock>
+                                                        <TextBlock.Text>
+                                                            <MultiBinding Converter="{StaticResource RSC}" Mode="OneWay">
+                                                                <Binding Path="IsMonitoring" Mode="OneWay"/>
+                                                                <Binding Path="IsRecording" Mode="OneWay"/>
+                                                            </MultiBinding>
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
+                                                    <TextBlock Text="{Binding DownloadSpeedPersentage,StringFormat=0.##%,Mode=OneWay}" Margin="5,0,0,0"/>
+                                                    <TextBlock Margin="5,0" Text="{Binding RealRoomid,Mode=OneWay}"/>
+                                                    <TextBlock Text="{Binding StreamerName,Mode=OneWay}"/>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </Border>
+                        </tb:TaskbarIcon.TrayToolTip>
+                        <tb:TaskbarIcon.ContextMenu>
+                            <ContextMenu DataContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
+                                <!--<MenuItem IsCheckable="True">不弹出提醒</MenuItem>-->
+                                <MenuItem Header="退出">
+                                    <MenuItem Header="确认退出" Click="Taskbar_Quit_Click"/>
+                                </MenuItem>
+                            </ContextMenu>
+                        </tb:TaskbarIcon.ContextMenu>
+                    </tb:TaskbarIcon>
+                    <Grid Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="7*"/>
+                            <RowDefinition Height="4*"/>
+                            <RowDefinition Height="4*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="3.5*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <DataGrid x:Name="RoomList" ItemsSource="{Binding Recorder}" Grid.RowSpan="3"
                       SelectionMode="Extended" SelectionUnit="FullRow"
                       CanUserAddRows="False" CanUserDeleteRows="False"
                       AutoGenerateColumns="False" IsReadOnly="True"
@@ -89,161 +89,184 @@
 					Background="Transparent"  CanUserSortColumns="False"
 					BorderThickness="1"
 					BorderBrush="{StaticResource GridLinesBrush}">
-                <DataGrid.Resources>
-                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
-                    <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
-                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
-                    <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="Black" />
-                </DataGrid.Resources>
-                <DataGrid.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="浏览器打开直播间" Click="OpenRoomInBrowser"></MenuItem>
-                        <MenuItem Header="刷新信息" Click="RefreshRoomInfo"/>
-                        <MenuItem Header="删除" Click="RemoveRecRoom"/>
-                    </ContextMenu>
-                </DataGrid.ContextMenu>
-                <DataGrid.Columns>
-                    <DataGridTemplateColumn Header="回放剪辑">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Button Click="Clip_Click">剪辑</Button>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTextColumn Binding="{Binding ShortRoomId,Mode=OneWay}" Header="短号"/>
-                    <DataGridTextColumn Binding="{Binding RoomId,Mode=OneWay}" Header="房间号"/>
-                    <DataGridTextColumn Binding="{Binding StreamerName,Mode=OneWay}" Header="主播名字"/>
-                    <DataGridTemplateColumn Header="开播提醒">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <CheckBox HorizontalAlignment="Center" VerticalAlignment="Center"
+                            <DataGrid.Resources>
+                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
+                                <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
+                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
+                                <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="Black" />
+                            </DataGrid.Resources>
+                            <DataGrid.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="浏览器打开直播间" Click="OpenRoomInBrowser"></MenuItem>
+                                    <MenuItem Header="刷新信息" Click="RefreshRoomInfo"/>
+                                    <MenuItem Header="删除" Click="RemoveRecRoom"/>
+                                </ContextMenu>
+                            </DataGrid.ContextMenu>
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn Header="回放剪辑">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Click="Clip_Click">剪辑</Button>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Binding="{Binding ShortRoomId,Mode=OneWay}" Header="短号"/>
+                                <DataGridTextColumn Binding="{Binding RoomId,Mode=OneWay}" Header="房间号"/>
+                                <DataGridTextColumn Binding="{Binding StreamerName,Mode=OneWay}" Header="主播名字"/>
+                                <DataGridTemplateColumn Header="开播提醒">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <CheckBox HorizontalAlignment="Center" VerticalAlignment="Center"
 										          IsChecked="{Binding Path=IsNotify, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTextColumn Binding="{Binding IsLiving,Converter={StaticResource LiveStatusConverter},Mode=OneWay}" Header="直播状态"/>
-                    <DataGridTextColumn Binding="{Binding IsRecording,Converter={StaticResource RecordStatusConverter},Mode=OneWay}" Header="录制状态"/>
-                    <DataGridTextColumn Binding="{Binding Title,Mode=OneWay}" Header="直播间标题"/>
-                    <DataGridTextColumn Binding="{Binding IsMonitoring,Converter={StaticResource MonitorStatusConverter},Mode=OneWay}" Header="是否自动录制"/>
-                    <DataGridTextColumn Binding="{Binding DownloadSpeedMegaBitps,StringFormat=0.## Mbps,Mode=OneWay}" Header="实时下载速度"/>
-                    <DataGridTextColumn Binding="{Binding DownloadSpeedPersentage,StringFormat=0.## %,Mode=OneWay}" Header="录制速度比"/>
-                    <DataGridTextColumn Binding="{Binding Processor.Clips.Count,Mode=OneWay}" Header="剪辑数量"/>
-                </DataGrid.Columns>
-            </DataGrid>
-            <ItemsControl Grid.Row="1" Grid.RowSpan="2" x:Name="Log" ItemsSource="{Binding Logs}" ItemTemplate="{StaticResource LogTemplate}" ToolTip="右键点击可以复制单行日志">
-                <ItemsControl.Template>
-                    <ControlTemplate>
-                        <ScrollViewer x:Name="LogScroll" CanContentScroll="True">
-                            <ItemsPresenter/>
-                        </ScrollViewer>
-                    </ControlTemplate>
-                </ItemsControl.Template>
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <VirtualizingStackPanel IsItemsHost="True"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
-            <Grid Grid.Column="1" DataContext="{Binding ElementName=RoomList,Path=SelectedItem}" Grid.RowSpan="2">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="10"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="25"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="2*"/>
-                </Grid.ColumnDefinitions>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Binding="{Binding IsLiving,Converter={StaticResource LiveStatusConverter},Mode=OneWay}" Header="直播状态"/>
+                                <DataGridTextColumn Binding="{Binding IsRecording,Converter={StaticResource RecordStatusConverter},Mode=OneWay}" Header="录制状态"/>
+                                <DataGridTextColumn Binding="{Binding Title,Mode=OneWay}" Header="直播间标题"/>
+                                <DataGridTextColumn Binding="{Binding IsMonitoring,Converter={StaticResource MonitorStatusConverter},Mode=OneWay}" Header="是否自动录制"/>
+                                <DataGridTextColumn Binding="{Binding DownloadSpeedMegaBitps,StringFormat=0.## Mbps,Mode=OneWay}" Header="实时下载速度"/>
+                                <DataGridTextColumn Binding="{Binding DownloadSpeedPersentage,StringFormat=0.## %,Mode=OneWay}" Header="录制速度比"/>
+                                <DataGridTextColumn Binding="{Binding Processor.Clips.Count,Mode=OneWay}" Header="剪辑数量"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <Grid Grid.Column="1" DataContext="{Binding ElementName=RoomList,Path=SelectedItem}" Grid.RowSpan="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="10"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="25"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1.1*"/>
+                                <ColumnDefinition Width="2*"/>
+                            </Grid.ColumnDefinitions>
 
 
-                <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">短号：</TextBlock>
-                <TextBlock Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{Binding ShortRoomId,Mode=OneWay}"/>
+                            <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">短号：</TextBlock>
+                            <TextBlock Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{Binding ShortRoomId,Mode=OneWay}"/>
 
-                <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">房间号：</TextBlock>
-                <TextBlock Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{Binding RoomId,Mode=OneWay}"/>
+                            <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">房间号：</TextBlock>
+                            <TextBlock Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{Binding RoomId,Mode=OneWay}"/>
 
-                <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">主播名字：</TextBlock>
-                <TextBlock Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{Binding StreamerName,Mode=OneWay}"/>
+                            <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">主播名字：</TextBlock>
+                            <TextBlock Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{Binding StreamerName,Mode=OneWay}"/>
 
-                <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">录制状态：</TextBlock>
-                <TextBlock Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" >
-                    <TextBlock.Text>
-                        <MultiBinding Converter="{StaticResource RSC}" Mode="OneWay">
-                            <Binding Path="IsMonitoring" Mode="OneWay"/>
-                            <Binding Path="IsRecording" Mode="OneWay"/>
-                        </MultiBinding>
-                    </TextBlock.Text>
-                </TextBlock>
+                            <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">录制状态：</TextBlock>
+                            <TextBlock Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" >
+                                <TextBlock.Text>
+                                    <MultiBinding Converter="{StaticResource RSC}" Mode="OneWay">
+                                        <Binding Path="IsMonitoring" Mode="OneWay"/>
+                                        <Binding Path="IsRecording" Mode="OneWay"/>
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
 
-                <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">处理中剪辑数量：</TextBlock>
-                <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{Binding Processor.Clips.Count,Mode=OneWay}"/>
+                            <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">处理中剪辑数量：</TextBlock>
+                            <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{Binding Processor.Clips.Count,Mode=OneWay}"/>
 
-                <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">实时下载速度：</TextBlock>
-                <TextBlock Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{Binding DownloadSpeedMegaBitps,StringFormat=0.## Mbps,Mode=OneWay}"/>
+                            <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">实时下载速度：</TextBlock>
+                            <TextBlock Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{Binding DownloadSpeedMegaBitps,StringFormat=0.## Mbps,Mode=OneWay}"/>
 
-                <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">录制速度比：</TextBlock>
-                <TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{Binding DownloadSpeedPersentage,StringFormat=0.## %,Mode=OneWay}"/>
+                            <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">录制速度比：</TextBlock>
+                            <TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{Binding DownloadSpeedPersentage,StringFormat=0.## %,Mode=OneWay}"/>
 
 
-                <Grid Grid.Row="9" Grid.ColumnSpan="2">
+                            <Grid Grid.Row="9" Grid.ColumnSpan="2">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Button Grid.Column="0" Margin="5,0" Click="EnableAutoRec">启用自动录制</Button>
+                                <Button Grid.Column="1" Margin="5,0" Click="DisableAutoRec">禁用自动录制</Button>
+                                <Button Grid.Row="1" Grid.Column="0" Margin="5" Click="TriggerRec">手动触发开始录制</Button>
+                                <Button Grid.Row="1" Grid.Column="1" Margin="5" Click="CutRec">切断当前录制</Button>
+                            </Grid>
+                        </Grid>
+                        <Grid Grid.Column="1" Grid.Row="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid Grid.Row="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock VerticalAlignment="Center" Margin="5,2" Grid.Column="0">添加直播间：</TextBlock>
+                                <TextBox VerticalAlignment="Center" Margin="0,2" Grid.Column="1" x:Name="AddRoomidTextBox" KeyUp="AddRoomidTextBox_KeyUp"/>
+                                <Button VerticalAlignment="Center" Margin="5,2" Padding="10,0" Grid.Column="2" x:Name="AddRoomidButton" Click="AddRoomidButton_Click">添加</Button>
+                            </Grid>
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Button Grid.Column="0" Margin="5,2" Click="EnableAllAutoRec">启用所有直播间</Button>
+                                <Button Grid.Column="1" Margin="5,2" Click="DisableAllAutoRec">禁用所有直播间</Button>
+                            </Grid>
+
+                        </Grid>
+                        <Grid Grid.Column="1" Grid.Row="3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Button x:Name="TabSettingsButton" Click="TabSettingsButton_Click" Visibility="Visible" HorizontalAlignment="Right" Width="80" Height="30" VerticalAlignment="Bottom" Margin="10,10" Content="修改工作目录" Grid.Column="0"/>
+                            <Button x:Name="SettingsButton" Click="SettingsButton_Click" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="50" Height="30" Margin="10 10" Content="设置" Grid.Column="1"/>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </DockPanel>
+        </TabItem>
+        <TabItem Header="日志">
+            <DockPanel>
+                <Grid>
+                    <Grid.Resources>
+                        <DataTemplate x:Key="LogTemplate" >
+                            <TextBlock Text="{Binding}" TextWrapping="Wrap" MouseRightButtonUp="TextBlock_MouseRightButtonUp"/>
+                        </DataTemplate>
+                    </Grid.Resources>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
+                        <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Button Grid.Column="0" Margin="5,0" Click="EnableAutoRec">启用自动录制</Button>
-                    <Button Grid.Column="1" Margin="5,0" Click="DisableAutoRec">禁用自动录制</Button>
-                    <Button Grid.Row="1" Grid.Column="0" Margin="5" Click="TriggerRec">手动触发开始录制</Button>
-                    <Button Grid.Row="1" Grid.Column="1" Margin="5" Click="CutRec">切断当前录制</Button>
-                </Grid>
-            </Grid>
-            <Grid Grid.Column="1" Grid.Row="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <Grid Grid.Row="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock VerticalAlignment="Center" Margin="5,2" Grid.Column="0">添加直播间：</TextBlock>
-                    <TextBox VerticalAlignment="Center" Margin="0,2" Grid.Column="1" x:Name="AddRoomidTextBox" KeyUp="AddRoomidTextBox_KeyUp"/>
-                    <Button VerticalAlignment="Center" Margin="5,2" Padding="10,0" Grid.Column="2" x:Name="AddRoomidButton" Click="AddRoomidButton_Click">添加</Button>
-                </Grid>
-                <Grid Grid.Row="1">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Button Grid.Column="0" Margin="5,2" Click="EnableAllAutoRec">启用所有直播间</Button>
-                    <Button Grid.Column="1" Margin="5,2" Click="DisableAllAutoRec">禁用所有直播间</Button>
-                </Grid>
+                    <ItemsControl Grid.Row="0"  Grid.Column="0" x:Name="Log" ItemsSource="{Binding Logs}" ItemTemplate="{StaticResource LogTemplate}" ToolTip="右键点击可以复制单行日志">
+                        <ItemsControl.Template>
+                            <ControlTemplate>
+                                <ScrollViewer x:Name="LogScroll" CanContentScroll="True">
+                                    <ItemsPresenter/>
+                                </ScrollViewer>
+                            </ControlTemplate>
+                        </ItemsControl.Template>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel IsItemsHost="True"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
 
-            </Grid>
-            <Grid Grid.Column="1" Grid.Row="3">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Button x:Name="TabSettingsButton" Click="TabSettingsButton_Click" Visibility="Visible" HorizontalAlignment="Right" Width="80" Height="30" VerticalAlignment="Bottom" Margin="10,10" Content="修改工作目录" Grid.Column="0"/>
-                <Button x:Name="SettingsButton" Click="SettingsButton_Click" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="50" Height="30" Margin="10 10" Content="设置" Grid.Column="1"/>
-            </Grid>
-        </Grid>
-    </Grid>
+                </Grid>
+               
+            </DockPanel>
+        </TabItem>
+    </TabControl>
+    
 </Window>
