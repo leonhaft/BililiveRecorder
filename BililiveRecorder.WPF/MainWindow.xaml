@@ -97,8 +97,8 @@
                             </DataGrid.Resources>
                             <DataGrid.ContextMenu>
                                 <ContextMenu>
-                                    <MenuItem Header="浏览器打开直播间" Click="OpenRoomInBrowser"></MenuItem>
                                     <MenuItem Header="刷新信息" Click="RefreshRoomInfo"/>
+                                    <MenuItem Header="浏览器打开直播间" Click="OpenRoomInBrowser"></MenuItem>
                                     <MenuItem Header="删除" Click="RemoveRecRoom"/>
                                 </ContextMenu>
                             </DataGrid.ContextMenu>
