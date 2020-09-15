@@ -20,7 +20,11 @@ namespace BililiveRecorder.WPF
         {
             if (File.Exists(LAST_WORK_DIR_FILE))
             {
-                return File.ReadAllText(LAST_WORK_DIR_FILE);
+                var dir = File.ReadAllText(LAST_WORK_DIR_FILE);
+                if (Directory.Exists(dir))
+                {
+                    return dir;
+                }
             }
 
             return string.Empty;
@@ -52,7 +56,11 @@ namespace BililiveRecorder.WPF
         {
             if (File.Exists(NEW_WORK_DIR_FILE))
             {
-                return File.ReadAllText(NEW_WORK_DIR_FILE);
+                var dir = File.ReadAllText(NEW_WORK_DIR_FILE);
+                if (Directory.Exists(dir))
+                {
+                    return dir;
+                }
             }
 
             return string.Empty;

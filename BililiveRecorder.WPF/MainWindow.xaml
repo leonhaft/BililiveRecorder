@@ -225,10 +225,11 @@
                         <Grid Grid.Column="1" Grid.Row="3">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <Button x:Name="TabSettingsButton" Click="TabSettingsButton_Click" Visibility="Visible" HorizontalAlignment="Right" Width="80" Height="30" VerticalAlignment="Bottom" Margin="10,10" Content="修改工作目录" Grid.Column="0"/>
-                            <Button x:Name="SettingsButton" Click="SettingsButton_Click" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="50" Height="30" Margin="10 10" Content="设置" Grid.Column="1"/>
+                            <Button x:Name="TabSettingsButton" Click="TabSettingsButton_Click" Visibility="Visible" HorizontalAlignment="Right" Width="80" Height="30" VerticalAlignment="Bottom" Margin="10,10,190,10" Content="修改工作目录" Grid.Column="0"/>
+                            <Button x:Name="FolderButton" Click="FolderButton_Click"  Visibility="Visible" HorizontalAlignment="Right" Width="80" Height="30" VerticalAlignment="Bottom" Margin="10,10,85,10" Content="打开工作目录" Grid.Column="0"/>
+
+                            <Button x:Name="SettingsButton" Click="SettingsButton_Click" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="50" Height="30" Margin="10 10" Content="设置" Grid.Column="0"/>
                         </Grid>
                     </Grid>
                 </Grid>

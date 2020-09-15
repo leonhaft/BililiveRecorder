@@ -539,5 +539,12 @@ namespace BililiveRecorder.WPF
                 }
             }
         }
+
+        private void FolderButton_Click(object sender, RoutedEventArgs e)
+        {
+
+            Process.Start("explorer.exe", WorkDirService.LastWorkDir());
+
+        }
     }
 }
