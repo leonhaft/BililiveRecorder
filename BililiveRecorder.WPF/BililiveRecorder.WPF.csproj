@@ -47,12 +47,11 @@
   <ItemGroup>
     <Resource Include="ico.ico" />
   </ItemGroup>
-
+    <ItemGroup>
+        <Compile Include="..\TempBuildInfo\BuildInfo.WPF.cs" />
+    </ItemGroup>
   <ItemGroup>
     <None Update="NLog.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="正道的光.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="正道的光.wav">
