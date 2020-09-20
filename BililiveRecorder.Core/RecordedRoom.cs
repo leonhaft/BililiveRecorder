@@ -1,4 +1,4 @@
-﻿using BililiveRecorder.Core.Config;
+using BililiveRecorder.Core.Config;
 using BililiveRecorder.FlvProcessor;
 using NLog;
 using System;
@@ -176,6 +176,7 @@ namespace BililiveRecorder.Core
                 if (room != null)
                 {
                     _isNotify = room.Notify;
+                    _isFav = room.Fav;
                 }
             }
 
@@ -194,7 +195,7 @@ namespace BililiveRecorder.Core
                 ShortRoomId = e.RoomInfo.ShortRoomId.HasValue && e.RoomInfo.ShortRoomId != 0 ? e.RoomInfo.ShortRoomId : null;
                 StreamerName = e.RoomInfo.UserName;
                 Title = e.RoomInfo.Title;
-                e.RoomInfo.Fav = CurrentFav();
+                e.RoomInfo.Fav = IsFav;
                 //直播状态发生变化时设置直播状态,触发开播通知
                 if (e.RoomInfo.IsStreaming != IsLiving)
                 {
@@ -630,7 +631,7 @@ namespace BililiveRecorder.Core
             }
         }
 
-        private bool? CurrentFav()
+        private bool CurrentFav()
         {
             var roomConfig = _config.RoomList.FirstOrDefault(r => r.Roomid == RoomId);
             if (roomConfig != null)
@@ -638,7 +639,7 @@ namespace BililiveRecorder.Core
                 return roomConfig.Fav;
             }
 
-            return null;
+            return false;
         }
     }
 }

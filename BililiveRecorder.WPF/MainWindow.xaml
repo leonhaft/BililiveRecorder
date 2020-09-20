@@ -13,8 +13,20 @@
         <ResourceDictionary>
             <SolidColorBrush Color="LightGray" x:Key="GridLinesBrush" />
             <SolidColorBrush x:Key="DisabledBackgroundBrush" Color="LightGray" />
+            <Style TargetType="DataGridCell" x:Key="FavCellStyle">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsFav,UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
+                        <Setter Property="Foreground" Value="Green"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding IsFav,UpdateSourceTrigger=PropertyChanged}" Value="True">
+                        <Setter Property="Foreground" Value="Blue"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
         </ResourceDictionary>
+
     </Window.Resources>
+
     <TabControl x:Name="TabControl" AllowDrop="True">
         <TabItem Header="录播机">
             <DockPanel>
@@ -101,7 +113,7 @@
                                     <MenuItem Header="刷新信息" Click="RefreshRoomInfo"/>
                                     <MenuItem Header="浏览器打开直播间" Click="OpenRoomInBrowser"></MenuItem>
                                     <MenuItem Header="特别关注" Click="MenuItem_Click"></MenuItem>
-
+                                
                                     <MenuItem Header="删除" Click="RemoveRecRoom"/>
                                 </ContextMenu>
                             </DataGrid.ContextMenu>
@@ -115,9 +127,9 @@
                                 </DataGridTemplateColumn>
                                 <DataGridTextColumn Binding="{Binding ShortRoomId,Mode=OneWay}" Header="短号"/>
                                 <DataGridTextColumn Binding="{Binding RoomId,Mode=OneWay}" Header="房间号"/>
-                                <DataGridTextColumn Binding="{Binding StreamerName,Mode=OneWay}"  Header="主播名字">
-                                  
+                                <DataGridTextColumn Binding="{Binding StreamerName,Mode=OneWay}" CellStyle="{StaticResource FavCellStyle}"  Header="主播名字">
                                 </DataGridTextColumn>
+
                                 <DataGridTemplateColumn Header="开播提醒">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>

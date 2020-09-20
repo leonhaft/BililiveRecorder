@@ -157,7 +157,7 @@ namespace BililiveRecorder.WPF
                     NotifyIcon.HideBalloonTip();
                     NotifyIcon.ShowBalloonTip($"{room.UserName}开播了！！！", room.Title, BalloonIcon.Info);
                 }, DispatcherPriority.Loaded);
-                if (room.Fav.HasValue && room.Fav.Value)
+                if (room.Fav)
                 {
                     PlayMedia();
                 }
