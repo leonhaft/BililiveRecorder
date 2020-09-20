@@ -11,6 +11,8 @@ namespace BililiveRecorder.Core
         string StreamerName { get; }
         bool IsNotify { get; }
 
+        bool IsFav { get; }
+
         IStreamMonitor StreamMonitor { get; }
         IFlvStreamProcessor Processor { get; }
 
@@ -32,5 +34,11 @@ namespace BililiveRecorder.Core
         void RefreshRoomInfo();
 
         void Shutdown();
+
+        /// <summary>
+        /// 设置是否特别关注
+        /// </summary>
+        /// <param name="isFav"></param>
+        void Fav(bool fav);
     }
 }

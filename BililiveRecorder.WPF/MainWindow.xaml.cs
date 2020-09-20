@@ -9,12 +9,14 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Media;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Threading;
 
 namespace BililiveRecorder.WPF
@@ -155,7 +157,20 @@ namespace BililiveRecorder.WPF
                     NotifyIcon.HideBalloonTip();
                     NotifyIcon.ShowBalloonTip($"{room.UserName}开播了！！！", room.Title, BalloonIcon.Info);
                 }, DispatcherPriority.Loaded);
+                if (room.Fav.HasValue && room.Fav.Value)
+                {
+                    PlayMedia();
+                }
             }
+        }
+
+        private void PlayMedia()
+        {
+            var player = new SoundPlayer("正道的光.wav");
+            player.PlaySync();
+            //MediaPlayer player = new MediaPlayer();
+            //player.Open(new Uri("正道的光.wav", UriKind.Relative));
+            //player.Play();
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -545,6 +560,18 @@ namespace BililiveRecorder.WPF
 
             Process.Start("explorer.exe", WorkDirService.LastWorkDir());
 
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var rr = (IRecordedRoom)((DataGrid)((ContextMenu)((MenuItem)sender)?.Parent)?.PlacementTarget)?.SelectedItem;
+            if (rr == null)
+            {
+                return;
+            }
+
+            Recorder.SetRoomFav(rr);
+            Recorder.SaveConfigToFile();
         }
     }
 }

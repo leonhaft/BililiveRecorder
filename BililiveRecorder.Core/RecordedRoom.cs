@@ -25,6 +25,7 @@ namespace BililiveRecorder.Core
         private string _title;
         private bool _isLiving;
         private bool _isNotify;
+        private bool _isFav;
 
         public int? ShortRoomId
         {
@@ -96,6 +97,19 @@ namespace BililiveRecorder.Core
                 _isNotify = value;
                 TriggerPropertyChanged(nameof(IsNotify));
                 TriggerNotifyChanged(value);
+            }
+        }
+
+        public bool IsFav
+        {
+            get
+            {
+                return this._isFav;
+            }
+            set
+            {
+                this._isFav = value;
+                TriggerPropertyChanged(nameof(IsFav));
             }
         }
 
@@ -180,6 +194,7 @@ namespace BililiveRecorder.Core
                 ShortRoomId = e.RoomInfo.ShortRoomId.HasValue && e.RoomInfo.ShortRoomId != 0 ? e.RoomInfo.ShortRoomId : null;
                 StreamerName = e.RoomInfo.UserName;
                 Title = e.RoomInfo.Title;
+                e.RoomInfo.Fav = CurrentFav();
                 //直播状态发生变化时设置直播状态,触发开播通知
                 if (e.RoomInfo.IsStreaming != IsLiving)
                 {
@@ -597,6 +612,33 @@ namespace BililiveRecorder.Core
             // 请勿更改此代码。将清理代码放入以上 Dispose(bool disposing) 中。
             Dispose(true);
         }
+
+
         #endregion
+
+        /// <summary>
+        /// 设置是否特别关注
+        /// </summary>
+        /// <param name="isFav"></param>
+        public void Fav(bool isFav)
+        {
+            IsFav = isFav;
+            var room = _config.RoomList.FirstOrDefault(r => r.Roomid == RoomId);
+            if (room != null)
+            {
+                room.Fav = isFav;
+            }
+        }
+
+        private bool? CurrentFav()
+        {
+            var roomConfig = _config.RoomList.FirstOrDefault(r => r.Roomid == RoomId);
+            if (roomConfig != null)
+            {
+                return roomConfig.Fav;
+            }
+
+            return null;
+        }
     }
 }

@@ -196,7 +196,8 @@ namespace BililiveRecorder.Core
                 {
                     Roomid = rr.RoomId,
                     Enabled = rr.IsMonitoring,
-                    Notify = rr.IsNotify
+                    Notify = rr.IsNotify,
+                    Fav = rr.IsFav
                 });
             });
 
@@ -242,5 +243,16 @@ namespace BililiveRecorder.Core
 
         IEnumerator IEnumerable.GetEnumerator() => Rooms.GetEnumerator();
 
+        public void SetRoomFav(IRecordedRoom room)
+        {
+            if (!_valid) { throw new InvalidOperationException("Not Initialized"); }
+
+            logger.Debug("设置 {roomid}为特别关注", room.RoomId);
+            var roomInfo = Rooms.FirstOrDefault(s => s.RoomId == room.RoomId);
+            if (roomInfo != null)
+            {
+                roomInfo.Fav(!room.IsFav);
+            }
+        }
     }
 }

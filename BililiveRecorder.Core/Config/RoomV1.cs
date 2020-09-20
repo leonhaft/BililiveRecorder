@@ -13,5 +13,8 @@ namespace BililiveRecorder.Core.Config
 
         [JsonProperty("notify")]
         public bool Notify { get; set; }
+
+        [JsonProperty("fav")]
+        public bool Fav { get; set; }
     }
 }

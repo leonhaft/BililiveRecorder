@@ -17,6 +17,8 @@ namespace BililiveRecorder.Core
 
         void RemoveRoom(IRecordedRoom rr);
 
+        void SetRoomFav(IRecordedRoom room);
+
         void SaveConfigToFile();
 
         void Shutdown();

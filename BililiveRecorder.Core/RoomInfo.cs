@@ -8,5 +8,6 @@
         public bool IsStreaming;
         public string Title;
         public bool IsNotify;
+        public bool? Fav;
     }
 }

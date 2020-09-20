@@ -21,11 +21,12 @@
                 <Grid>
                     <Grid.Resources>
                         <ResourceDictionary>
-                         
+
                             <local:RecordStatusConverter x:Key="RSC"/>
                             <local:BoolToStringConverter x:Key="RecordStatusConverter" TrueValue="录制中" FalseValue="闲置"/>
                             <local:BoolToStringConverter x:Key="MonitorStatusConverter" TrueValue="自动录制" FalseValue="非自动"/>
                             <local:BoolToStringConverter x:Key="LiveStatusConverter" TrueValue="正在直播" FalseValue="修仙中"/>
+                            <local:BoolToStringConverter x:Key="FavConverter" TrueValue="取消特别关注" FalseValue="设为特别关注"/>
                         </ResourceDictionary>
                     </Grid.Resources>
                     <Grid.RowDefinitions>
@@ -99,6 +100,8 @@
                                 <ContextMenu>
                                     <MenuItem Header="刷新信息" Click="RefreshRoomInfo"/>
                                     <MenuItem Header="浏览器打开直播间" Click="OpenRoomInBrowser"></MenuItem>
+                                    <MenuItem Header="特别关注" Click="MenuItem_Click"></MenuItem>
+
                                     <MenuItem Header="删除" Click="RemoveRecRoom"/>
                                 </ContextMenu>
                             </DataGrid.ContextMenu>
@@ -112,7 +115,9 @@
                                 </DataGridTemplateColumn>
                                 <DataGridTextColumn Binding="{Binding ShortRoomId,Mode=OneWay}" Header="短号"/>
                                 <DataGridTextColumn Binding="{Binding RoomId,Mode=OneWay}" Header="房间号"/>
-                                <DataGridTextColumn Binding="{Binding StreamerName,Mode=OneWay}" Header="主播名字"/>
+                                <DataGridTextColumn Binding="{Binding StreamerName,Mode=OneWay}"  Header="主播名字">
+                                  
+                                </DataGridTextColumn>
                                 <DataGridTemplateColumn Header="开播提醒">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
@@ -265,9 +270,9 @@
                     </ItemsControl>
 
                 </Grid>
-               
+
             </DockPanel>
         </TabItem>
     </TabControl>
-    
+
 </Window>
