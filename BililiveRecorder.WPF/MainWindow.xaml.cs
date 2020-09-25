@@ -160,6 +160,7 @@ namespace BililiveRecorder.WPF
                 if (room.Fav)
                 {
                     PlayMedia();
+                    OpenUrl(GetStreamUrl(room.RoomId));
                 }
             }
         }
@@ -333,7 +334,12 @@ namespace BililiveRecorder.WPF
                 return;
             }
 
-            OpenUrl($"https://live.bilibili.com/{rr.RoomId}");
+            OpenUrl(GetStreamUrl(rr.RoomId));
+        }
+
+        private string GetStreamUrl(int roomId)
+        {
+            return $"https://live.bilibili.com/{roomId}";
         }
 
         /// <summary>
